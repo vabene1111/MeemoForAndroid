@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MeemoforAndroid.iml" filepath="$PROJECT_DIR$/MeemoforAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MeemoForAndroid.iml" filepath="$PROJECT_DIR$/MeemoForAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
