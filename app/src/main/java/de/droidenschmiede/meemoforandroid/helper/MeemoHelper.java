@@ -50,7 +50,12 @@ public class MeemoHelper {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.print(error);
+                    try {
+                        String responseContent = new String(error.networkResponse.data,"UTF-8");
+                        System.out.print(responseContent);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    };
                 }
             }) {
                 @Override
@@ -66,13 +71,6 @@ public class MeemoHelper {
                         VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
                         return null;
                     }
-                }
-
-                @Override
-                public Map<String, String> getHeaders(){
-                    Map<String, String> headers = new HashMap<String, String>();
-                    headers.put("User-agent", "YOUR_USER_AGENT");
-                    return headers;
                 }
 
                 @Override

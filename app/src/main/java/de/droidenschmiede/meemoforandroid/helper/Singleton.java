@@ -15,7 +15,7 @@ public class Singleton {
 
     public static final String server = "https://notes.ekaack.de";
     public static final String username = "vabene";
-    public static final String password = "&MmPPWN3JP6zD~@3h^vL";
+    public static final String password = "nhZExeeiWuLCEv6TRw3y";
 
     private Singleton () {}
 
