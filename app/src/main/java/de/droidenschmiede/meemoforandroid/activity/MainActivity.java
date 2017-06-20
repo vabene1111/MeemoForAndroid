@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,7 @@ import de.droidenschmiede.meemoforandroid.R;
 import de.droidenschmiede.meemoforandroid.helper.MeemoHelper;
 import de.droidenschmiede.meemoforandroid.helper.Singleton;
 import de.droidenschmiede.meemoforandroid.interfaces.VolleyInterface;
+import de.droidenschmiede.meemoforandroid.objects.CustomError;
 import de.droidenschmiede.meemoforandroid.objects.Login;
 import de.droidenschmiede.meemoforandroid.objects.Thing;
 import de.droidenschmiede.meemoforandroid.objects.Things;
@@ -60,6 +62,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResponse(String result, Class clazz) {
         MeemoHelper meemoHelper = new MeemoHelper();
+
+        if (clazz.equals(CustomError.class)) {
+
+            Gson gson = new Gson();
+            CustomError error = gson.fromJson(result, CustomError.class);
+
+            Snackbar.make(findViewById(R.id.lay_main_content), error.getStatus() + "\n" + error.getMessage() ,Snackbar.LENGTH_SHORT).show();
+        }
 
         if (clazz.equals(Login.class)) {
             Gson gson = new Gson();

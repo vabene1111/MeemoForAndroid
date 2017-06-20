@@ -2,10 +2,10 @@ package de.droidenschmiede.meemoforandroid.objects;
 
 /**
  * Created by vabene1111 on 20.06.2017.
- * Represents Meeomo Error Objects
+ * Represents Meeomo CustomError Objects
  */
 
-public class Error {
+public class CustomError {
 
     private String status;
     private String message;

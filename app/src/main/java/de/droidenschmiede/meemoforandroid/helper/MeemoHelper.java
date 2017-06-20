@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import de.droidenschmiede.meemoforandroid.interfaces.VolleyInterface;
+import de.droidenschmiede.meemoforandroid.objects.CustomError;
 import de.droidenschmiede.meemoforandroid.objects.Login;
 import de.droidenschmiede.meemoforandroid.objects.Things;
 
@@ -54,9 +55,9 @@ public class MeemoHelper {
                     try {
                         if (error.networkResponse != null){
                             String responseContent = new String(error.networkResponse.data, "UTF-8");
-                            callback.onResponse(responseContent, Error.class);
+                            callback.onResponse(responseContent, CustomError.class);
                         }else{
-                            Log.d("MeemoHelper","Network Error");
+                            Log.d("MeemoHelper","Network CustomError");
                         }
 
                     } catch (UnsupportedEncodingException e) {
@@ -101,7 +102,7 @@ public class MeemoHelper {
             public void onErrorResponse(VolleyError error) {
                 try {
                     String responseContent = new String(error.networkResponse.data, "UTF-8");
-                    callback.onResponse(responseContent, Error.class);
+                    callback.onResponse(responseContent, CustomError.class);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

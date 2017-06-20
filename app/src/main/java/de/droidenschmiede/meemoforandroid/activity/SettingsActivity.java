@@ -58,6 +58,8 @@ public class SettingsActivity extends AppCompatActivity {
                 Singleton.setUsername(edtUsername.getText().toString());
                 Singleton.setPassword(edtPassword.getText().toString());
 
+                Snackbar.make(findViewById(R.id.lay_settings_main), "Settings Saved" ,Snackbar.LENGTH_SHORT).show();
+
             }
         });
     }
