@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -77,6 +78,10 @@ public class MainActivity extends AppCompatActivity
 
             Singleton.setLogin(login);
 
+            TextView tv = (TextView) findViewById(R.id.tv_nav_subtitle);
+            String text = login.getUser().getUsername() + "@" + Singleton.getServer();
+            tv.setText(text);
+
             meemoHelper.getUserThings(getApplicationContext(), this);
         }
 
@@ -102,6 +107,13 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        MeemoHelper meemoHelper = new MeemoHelper();
     }
 
     @Override

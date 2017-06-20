@@ -43,7 +43,7 @@ public class MeemoHelper {
             jsonBody.put("password", Singleton.getPassword());
             final String requestBody = jsonBody.toString();
 
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, Singleton.getServer() + "/api/login", new Response.Listener<String>() {
+            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, "https://" + Singleton.getServer() + "/api/login", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     callback.onResponse(response, Login.class);
@@ -90,7 +90,7 @@ public class MeemoHelper {
     public void getUserThings(Context c, final VolleyInterface callback) {
         RequestQueue queue = Volley.newRequestQueue(c);
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Singleton.getServer() + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, "https://" + Singleton.getServer() + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
                 .Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -106,11 +106,29 @@ public class MeemoHelper {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                ;
             }
         });
 
+        queue.add(jsonObjectRequest);
 
+    }
+
+    public void logoutUser(Context c, final VolleyInterface callback) {
+        RequestQueue queue = Volley.newRequestQueue(c);
+
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, "https://" + Singleton.getServer() + "/api/logout?token=" + Singleton.getLogin().getToken(), new Response
+                .Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //either this is successful or not, only called on application destroy so no callback needed/possible
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //either this is successful or not, only called on application destroy so no callback needed/possible
+            }
+        });
         queue.add(jsonObjectRequest);
 
     }

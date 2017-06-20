@@ -18,8 +18,16 @@ public class Login {
         this.token = token;
     }
 
+    public UserInfo getUser() {
+        return user;
+    }
 
-    private class UserInfo {
+    public void setUser(UserInfo user) {
+        this.user = user;
+    }
+
+
+    public class UserInfo {
         private String id;
         private String username;
         private String displayName;
