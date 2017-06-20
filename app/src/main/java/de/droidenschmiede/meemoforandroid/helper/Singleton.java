@@ -1,5 +1,7 @@
 package de.droidenschmiede.meemoforandroid.helper;
 
+import android.content.Context;
+
 import de.droidenschmiede.meemoforandroid.objects.Login;
 
 /**
@@ -12,10 +14,9 @@ public class Singleton {
 
     private static Login login;
 
-
-    public static final String server = "https://notes.ekaack.de";
-    public static final String username = "vabene";
-    public static final String password = "nhZExeeiWuLCEv6TRw3y";
+    static final String server = "https://notes.ekaack.de";
+    static final String username = "vabene";
+    static final String password = "nhZExeeiWuLCEv6TRw3y";
 
     private Singleton () {}
 
@@ -25,5 +26,13 @@ public class Singleton {
             Singleton.instance = new Singleton ();
         }
         return Singleton.instance;
+    }
+
+    public static Login getLogin() {
+        return login;
+    }
+
+    public static void setLogin(Login login) {
+        Singleton.login = login;
     }
 }
