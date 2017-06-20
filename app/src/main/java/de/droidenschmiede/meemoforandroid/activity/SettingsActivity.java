@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.droidenschmiede.meemoforandroid.R;
+import de.droidenschmiede.meemoforandroid.helper.Singleton;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -52,6 +53,10 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.putString("username", edtUsername.getText().toString());
                 editor.putString("password", edtPassword.getText().toString());
                 editor.apply();
+
+                Singleton.setServer(edtServer.getText().toString());
+                Singleton.setUsername(edtUsername.getText().toString());
+                Singleton.setPassword(edtPassword.getText().toString());
 
             }
         });

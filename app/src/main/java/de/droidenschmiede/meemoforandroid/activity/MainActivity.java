@@ -1,11 +1,10 @@
 package de.droidenschmiede.meemoforandroid.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.droidenschmiede.meemoforandroid.R;
@@ -30,7 +28,7 @@ import de.droidenschmiede.meemoforandroid.objects.Things;
 import us.feras.mdv.MarkdownView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,VolleyInterface {
+        implements NavigationView.OnNavigationItemSelectedListener, VolleyInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +46,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Load settings
+        SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        Singleton.setServer(sharedPref.getString("server", ""));
+        Singleton.setUsername(sharedPref.getString("username", ""));
+        Singleton.setPassword(sharedPref.getString("password", ""));
+
+        //Login User
         MeemoHelper meemoHelper = new MeemoHelper();
         meemoHelper.loginUser(this, this);
     }
@@ -56,33 +61,33 @@ public class MainActivity extends AppCompatActivity
     public void onResponse(String result, Class clazz) {
         MeemoHelper meemoHelper = new MeemoHelper();
 
-        if (clazz.equals(Login.class)){
+        if (clazz.equals(Login.class)) {
             Gson gson = new Gson();
-            Login login = gson.fromJson(result,Login.class);
+            Login login = gson.fromJson(result, Login.class);
 
             Singleton.setLogin(login);
 
-            meemoHelper.getUserThings(getApplicationContext(),this);
+            meemoHelper.getUserThings(getApplicationContext(), this);
         }
 
-        if(clazz.equals(Things.class)){
+        if (clazz.equals(Things.class)) {
             try {
                 MarkdownView mv = (MarkdownView) findViewById(R.id.mv_main_test);
-                
+
                 Gson gson = new Gson();
-                Things things = gson.fromJson(result,Things.class);
+                Things things = gson.fromJson(result, Things.class);
 
                 ArrayList<Thing> thingList = things.getThings();
 
                 String markdownString = "";
 
-                for(int i = 0; i < thingList.size(); i++){
+                for (int i = 0; i < thingList.size(); i++) {
                     markdownString += thingList.get(i).getContent();
                     markdownString += "\n\n---\n\n";
                 }
 
                 mv.loadMarkdown(markdownString);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.d("MainActivity", e.getMessage());
             }
         }

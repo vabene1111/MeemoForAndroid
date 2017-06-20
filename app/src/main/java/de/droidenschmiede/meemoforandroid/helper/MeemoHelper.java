@@ -11,20 +11,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
-import de.droidenschmiede.meemoforandroid.R;
 import de.droidenschmiede.meemoforandroid.interfaces.VolleyInterface;
 import de.droidenschmiede.meemoforandroid.objects.Login;
 import de.droidenschmiede.meemoforandroid.objects.Things;
@@ -39,21 +33,16 @@ public class MeemoHelper {
 
     public void loginUser(Context c, final VolleyInterface callback) {
 
-        SharedPreferences sharedPref = c.getSharedPreferences("settings",Context.MODE_PRIVATE);
-        String server = sharedPref.getString("server", "");
-        String username = sharedPref.getString("username", "");
-        String password = sharedPref.getString("password", "");
-
         final JSONObject jsonBody;
 
         RequestQueue queue = Volley.newRequestQueue(c);
         try {
             jsonBody = new JSONObject();
-            jsonBody.put("username", username);
-            jsonBody.put("password", password);
+            jsonBody.put("username", Singleton.getUsername());
+            jsonBody.put("password", Singleton.getPassword());
             final String requestBody = jsonBody.toString();
 
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, server + "/api/login", new Response.Listener<String>() {
+            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, Singleton.getServer() + "/api/login", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     callback.onResponse(response, Login.class);
@@ -89,8 +78,6 @@ public class MeemoHelper {
                         return null;
                     }
                 }
-
-
             };
 
             queue.add(jsonObjectRequest);
@@ -102,10 +89,7 @@ public class MeemoHelper {
     public void getUserThings(Context c, final VolleyInterface callback) {
         RequestQueue queue = Volley.newRequestQueue(c);
 
-        SharedPreferences sharedPref = c.getSharedPreferences("settings",Context.MODE_PRIVATE);
-        String server = sharedPref.getString("server", "");
-
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, server + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Singleton.getServer() + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
                 .Listener<String>() {
             @Override
             public void onResponse(String response) {

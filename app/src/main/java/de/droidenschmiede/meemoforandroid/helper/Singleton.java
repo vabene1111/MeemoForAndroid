@@ -14,6 +14,10 @@ public class Singleton {
 
     private static Login login;
 
+    private static String server;
+    private static String username;
+    private static String password;
+
     private Singleton () {}
 
 
@@ -32,4 +36,27 @@ public class Singleton {
         Singleton.login = login;
     }
 
+    public static String getServer() {
+        return server;
+    }
+
+    public static void setServer(String server) {
+        Singleton.server = server;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        Singleton.username = username;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        Singleton.password = password;
+    }
 }
