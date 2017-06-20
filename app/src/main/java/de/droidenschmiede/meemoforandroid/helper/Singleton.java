@@ -14,10 +14,6 @@ public class Singleton {
 
     private static Login login;
 
-    static final String server = "https://notes.ekaack.de";
-    static final String username = "vabene";
-    static final String password = "nhZExeeiWuLCEv6TRw3y";
-
     private Singleton () {}
 
 
@@ -35,4 +31,5 @@ public class Singleton {
     public static void setLogin(Login login) {
         Singleton.login = login;
     }
+
 }

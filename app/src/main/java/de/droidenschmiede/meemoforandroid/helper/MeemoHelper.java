@@ -1,6 +1,7 @@
 package de.droidenschmiede.meemoforandroid.helper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -23,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.droidenschmiede.meemoforandroid.R;
 import de.droidenschmiede.meemoforandroid.interfaces.VolleyInterface;
 import de.droidenschmiede.meemoforandroid.objects.Login;
 import de.droidenschmiede.meemoforandroid.objects.Things;
@@ -37,16 +39,21 @@ public class MeemoHelper {
 
     public void loginUser(Context c, final VolleyInterface callback) {
 
+        SharedPreferences sharedPref = c.getSharedPreferences("settings",Context.MODE_PRIVATE);
+        String server = sharedPref.getString("server", "");
+        String username = sharedPref.getString("username", "");
+        String password = sharedPref.getString("password", "");
+
         final JSONObject jsonBody;
 
         RequestQueue queue = Volley.newRequestQueue(c);
         try {
             jsonBody = new JSONObject();
-            jsonBody.put("username", Singleton.username);
-            jsonBody.put("password", Singleton.password);
+            jsonBody.put("username", username);
+            jsonBody.put("password", password);
             final String requestBody = jsonBody.toString();
 
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, Singleton.server + "/api/login", new Response.Listener<String>() {
+            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, server + "/api/login", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     callback.onResponse(response, Login.class);
@@ -56,8 +63,13 @@ public class MeemoHelper {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     try {
-                        String responseContent = new String(error.networkResponse.data, "UTF-8");
-                        callback.onResponse(responseContent, Error.class);
+                        if (error.networkResponse != null){
+                            String responseContent = new String(error.networkResponse.data, "UTF-8");
+                            callback.onResponse(responseContent, Error.class);
+                        }else{
+                            Log.d("MeemoHelper","Network Error");
+                        }
+
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -90,7 +102,10 @@ public class MeemoHelper {
     public void getUserThings(Context c, final VolleyInterface callback) {
         RequestQueue queue = Volley.newRequestQueue(c);
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, Singleton.server + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
+        SharedPreferences sharedPref = c.getSharedPreferences("settings",Context.MODE_PRIVATE);
+        String server = sharedPref.getString("server", "");
+
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, server + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
                 .Listener<String>() {
             @Override
             public void onResponse(String response) {
