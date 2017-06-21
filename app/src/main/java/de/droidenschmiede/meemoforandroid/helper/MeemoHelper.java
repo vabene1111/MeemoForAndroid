@@ -31,58 +31,67 @@ public class MeemoHelper {
 
 
     public void loginUser(Context c, final VolleyInterface callback) {
-
         final JSONObject jsonBody;
 
-        RequestQueue queue = Volley.newRequestQueue(c);
         try {
             jsonBody = new JSONObject();
             jsonBody.put("username", Singleton.getUsername());
             jsonBody.put("password", Singleton.getPassword());
             final String requestBody = jsonBody.toString();
 
-            StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, "https://" + Singleton.getServer() + "/api/login", new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    callback.onResponse(response, Login.class);
-                }
+            String url = "https://" + Singleton.getServer() + "/api/login";
 
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    try {
-                        if (error.networkResponse != null){
-                            String responseContent = new String(error.networkResponse.data, "UTF-8");
-                            callback.onResponse(responseContent, CustomError.class);
-                        }else{
-                            Log.d("MeemoHelper","Network CustomError");
-                        }
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-            };
-
-            queue.add(jsonObjectRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            doRequest(c,callback,url,Login.class,Request.Method.POST,requestBody);
+        } catch (Exception e) {
+            Log.d("MeemoHelper","Json Error");
         }
+
+    }
+
+    public void doRequest(Context c, final VolleyInterface callback,String url, final Class responseType, int requestMethod, final String requestBody) {
+
+        RequestQueue queue = Volley.newRequestQueue(c);
+        StringRequest jsonObjectRequest = new StringRequest(requestMethod, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onResponse(response, responseType);
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    if (error.networkResponse != null) {
+                        String responseContent = new String(error.networkResponse.data, "UTF-8");
+                        callback.onResponse(responseContent, CustomError.class);
+                    } else {
+                        Log.d("VolleyHelper", "Network CustomError 1");
+                    }
+
+                } catch (UnsupportedEncodingException e) {
+                    Log.d("VolleyHelper", "Network CustomError 2");
+                    e.printStackTrace();
+                }
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        queue.add(jsonObjectRequest);
+
     }
 
     public void getUserThings(Context c, final VolleyInterface callback) {
