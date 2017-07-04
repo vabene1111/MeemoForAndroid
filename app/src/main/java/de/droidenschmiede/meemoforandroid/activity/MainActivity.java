@@ -16,13 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.droidenschmiede.meemoforandroid.R;
+import de.droidenschmiede.meemoforandroid.adapter.NoteItemAdapter;
 import de.droidenschmiede.meemoforandroid.helper.MeemoHelper;
 import de.droidenschmiede.meemoforandroid.helper.Singleton;
 import de.droidenschmiede.meemoforandroid.interfaces.VolleyInterface;
@@ -30,7 +33,6 @@ import de.droidenschmiede.meemoforandroid.objects.CustomError;
 import de.droidenschmiede.meemoforandroid.objects.Login;
 import de.droidenschmiede.meemoforandroid.objects.Thing;
 import de.droidenschmiede.meemoforandroid.objects.Things;
-import us.feras.mdv.MarkdownView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, VolleyInterface {
@@ -98,21 +100,14 @@ public class MainActivity extends AppCompatActivity
 
         if (clazz.equals(Things.class)) {
             try {
-                MarkdownView mv = (MarkdownView) findViewById(R.id.mv_main_test);
+                ListView listView = (ListView) findViewById(R.id.lv_main_list);
 
                 Gson gson = new Gson();
                 Things things = gson.fromJson(result, Things.class);
 
                 ArrayList<Thing> thingList = things.getThings();
 
-                String markdownString = "";
-
-                for (int i = 0; i < thingList.size(); i++) {
-                    markdownString += thingList.get(i).getContent();
-                    markdownString += "\n\n---\n\n";
-                }
-
-                mv.loadMarkdown(markdownString);
+               listView.setAdapter(new NoteItemAdapter(this,thingList));
             } catch (Exception e) {
                 Log.d("MainActivity", e.getMessage());
             }
