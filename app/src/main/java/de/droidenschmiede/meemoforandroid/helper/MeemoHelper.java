@@ -29,26 +29,16 @@ import de.droidenschmiede.meemoforandroid.objects.Things;
 
 public class MeemoHelper {
 
-
-    public void loginUser(Context c, final VolleyInterface callback) {
-        final JSONObject jsonBody;
-
-        try {
-            jsonBody = new JSONObject();
-            jsonBody.put("username", Singleton.getUsername());
-            jsonBody.put("password", Singleton.getPassword());
-            final String requestBody = jsonBody.toString();
-
-            String url = "https://" + Singleton.getServer() + "/api/login";
-
-            doRequest(c,callback,url,Login.class,Request.Method.POST,requestBody);
-        } catch (Exception e) {
-            Log.d("MeemoHelper","Json Error");
-        }
-
-    }
-
-    public void doRequest(Context c, final VolleyInterface callback,String url, final Class responseType, int requestMethod, final String requestBody) {
+    /**
+     * Do network Request
+     * @param c - Calling Context
+     * @param callback - Callback Interface
+     * @param url - URL
+     * @param responseType - corresponding Class for the expected response
+     * @param requestMethod - Request method, e.g. GET,POST,PUT,...
+     * @param requestBody - JsonObject to be used as a request Body
+     */
+    private void doRequest(Context c, final VolleyInterface callback, String url, final Class responseType, int requestMethod, final String requestBody) {
 
         RequestQueue queue = Volley.newRequestQueue(c);
         StringRequest jsonObjectRequest = new StringRequest(requestMethod, url, new Response.Listener<String>() {
@@ -94,49 +84,50 @@ public class MeemoHelper {
 
     }
 
-    public void getUserThings(Context c, final VolleyInterface callback) {
-        RequestQueue queue = Volley.newRequestQueue(c);
+    /**
+     * Obtain user Auth token
+     * @param c - Calling Context
+     * @param callback - Callback Interface
+     */
+    public void loginUser(Context c, final VolleyInterface callback) {
+        final JSONObject jsonBody;
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, "https://" + Singleton.getServer() + "/api/things?token=" + Singleton.getLogin().getToken(), new Response
-                .Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                callback.onResponse(response, Things.class);
-            }
+        try {
+            jsonBody = new JSONObject();
+            jsonBody.put("username", Singleton.getUsername());
+            jsonBody.put("password", Singleton.getPassword());
+            final String requestBody = jsonBody.toString();
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    String responseContent = new String(error.networkResponse.data, "UTF-8");
-                    callback.onResponse(responseContent, CustomError.class);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+            String url = "https://" + Singleton.getServer() + "/api/login";
 
-        queue.add(jsonObjectRequest);
+            doRequest(c,callback,url,Login.class,Request.Method.POST,requestBody);
+        } catch (Exception e) {
+            Log.d("MeemoHelper","Json Error");
+        }
 
     }
 
+    /**
+     * Get all user Things in 'Things' object
+     * @param c - Calling Context
+     * @param callback - Callback Interface
+     */
+    public void getUserThings(Context c, final VolleyInterface callback) {
+
+        String url = "https://" + Singleton.getServer() + "/api/things?token=" + Singleton.getLogin().getToken();
+        doRequest(c,callback,url,Things.class,Request.Method.GET,null);
+
+    }
+
+    /**
+     * Logout the User by invalidating the current token
+     * @param c - Calling Context
+     * @param callback - Callback Interface
+     */
     public void logoutUser(Context c, final VolleyInterface callback) {
-        RequestQueue queue = Volley.newRequestQueue(c);
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, "https://" + Singleton.getServer() + "/api/logout?token=" + Singleton.getLogin().getToken(), new Response
-                .Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //either this is successful or not, only called on application destroy so no callback needed/possible
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //either this is successful or not, only called on application destroy so no callback needed/possible
-            }
-        });
-        queue.add(jsonObjectRequest);
+        String url = "https://" + Singleton.getServer() + "/api/logout?token=" + Singleton.getLogin().getToken();
+        doRequest(c,callback,url,null,Request.Method.GET,null);
 
     }
 }
