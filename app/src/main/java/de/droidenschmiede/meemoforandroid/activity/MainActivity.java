@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             Gson gson = new Gson();
             CustomError error = gson.fromJson(result, CustomError.class);
 
-            Snackbar.make(findViewById(R.id.lay_main_content), error.getStatus() + "\n" + error.getMessage() ,Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.lay_main_content), error.getStatus() + "\n" + error.getMessage(), Snackbar.LENGTH_SHORT).show();
         }
 
         if (clazz.equals(Login.class)) {
@@ -107,7 +108,18 @@ public class MainActivity extends AppCompatActivity
 
                 ArrayList<Thing> thingList = things.getThings();
 
-               listView.setAdapter(new NoteItemAdapter(this,thingList));
+                listView.setAdapter(new NoteItemAdapter(this, thingList));
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        Thing thing = (Thing) parent.getItemAtPosition(position);
+                        Intent intent = new Intent(v.getContext(), NoteActivity.class);
+                        intent.putExtra("note_id",thing.get_id());
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
             } catch (Exception e) {
                 Log.d("MainActivity", e.getMessage());
             }
@@ -120,6 +132,7 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
 
         MeemoHelper meemoHelper = new MeemoHelper();
+        meemoHelper.logoutUser(this, this);
     }
 
     @Override

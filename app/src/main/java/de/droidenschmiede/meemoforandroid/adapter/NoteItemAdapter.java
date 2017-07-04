@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import br.tiagohm.markdownview.MarkdownView;
 import de.droidenschmiede.meemoforandroid.R;
@@ -35,7 +39,7 @@ public class NoteItemAdapter extends ArrayAdapter<Thing> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_note, parent, false);
             holder = new NoteViewHolder();
-            holder.mv_note = (MarkdownView) convertView.findViewById(R.id.mv_nItem_note);
+            holder.mv_note = (TextView) convertView.findViewById(R.id.mv_nItem_note);
             holder.tv_info = (TextView) convertView.findViewById(R.id.tv_nItem_info);
             convertView.setTag(holder);
         }else{
@@ -43,15 +47,18 @@ public class NoteItemAdapter extends ArrayAdapter<Thing> {
         }
 
 
-        holder.mv_note.loadMarkdown(thing.getContent());
+        //holder.mv_note.loadMarkdown(thing.getContent()); TODO markdown rendering in background thread
+        holder.mv_note.setText(thing.getRichContent());
 
-        holder.tv_info.setText(thing.getCreatedAt());
-        // Return the completed view to render on screen
+        Date modDate = new java.util.Date(Long.parseLong(thing.getModifiedAt()));
+        Format formatter = new SimpleDateFormat("dd. MMM - yy HH:mm", Locale.GERMAN); //TODO user locale
+        holder.tv_info.setText(formatter.format(modDate));
+
         return convertView;
     }
 
     static class NoteViewHolder {
-        MarkdownView mv_note;
+        TextView mv_note;
         TextView tv_info;
     }
 }
