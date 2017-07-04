@@ -39,7 +39,7 @@
                 android:text="Notitz"/>
 
             <android.support.design.widget.TabItem
-                android:id="@+id/tbItm_note_1"
+                android:id="@+id/tbItm_note_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Preview"/>
