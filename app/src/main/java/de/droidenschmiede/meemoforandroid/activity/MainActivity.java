@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
 
         MeemoHelper meemoHelper = new MeemoHelper();
-        meemoHelper.logoutUser(this, this);
+        //meemoHelper.logoutUser(this, this);
     }
 
     @Override
