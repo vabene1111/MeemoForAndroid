@@ -5,8 +5,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import br.tiagohm.markdownview.MarkdownView;
 import de.droidenschmiede.meemoforandroid.R;
+import de.droidenschmiede.meemoforandroid.helper.Singleton;
+import de.droidenschmiede.meemoforandroid.objects.Thing;
 
 
 /**
@@ -40,6 +49,19 @@ public class NotePreviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_note_preview, container, false);
+
+        MarkdownView mv = (MarkdownView) rootView.findViewById(R.id.mv_F_notePreview_main);
+        Singleton singleton = Singleton.getInstance();
+
+        Thing thing = singleton.getActiveThing();
+
+        mv.loadMarkdown(thing.getContent());
+
+        Date modDate = new java.util.Date(Long.parseLong(thing.getModifiedAt()));
+        Format formatter = new SimpleDateFormat("dd. MMM - yy HH:mm", Locale.GERMAN);
+
+        TextView tv_info = (TextView) rootView.findViewById(R.id.tv_F_notePreview_info);
+        tv_info.setText(formatter.format(modDate));
 
         return rootView;
     }

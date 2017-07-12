@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                         Thing thing = (Thing) parent.getItemAtPosition(position);
+                        Singleton singleton = Singleton.getInstance();
+                        singleton.setActiveThing(thing);
+
                         Intent intent = new Intent(v.getContext(), NoteActivity.class);
                         intent.putExtra("note_id",thing.get_id());
                         v.getContext().startActivity(intent);

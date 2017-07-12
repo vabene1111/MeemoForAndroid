@@ -3,6 +3,7 @@ package de.droidenschmiede.meemoforandroid.helper;
 import android.content.Context;
 
 import de.droidenschmiede.meemoforandroid.objects.Login;
+import de.droidenschmiede.meemoforandroid.objects.Thing;
 
 /**
  * Created by vabene1111 on 19.06.2017.
@@ -17,6 +18,8 @@ public class Singleton {
     private static String server;
     private static String username;
     private static String password;
+
+    private Thing activeThing;
 
     private Singleton () {}
 
@@ -58,5 +61,13 @@ public class Singleton {
 
     public static void setPassword(String password) {
         Singleton.password = password;
+    }
+
+    public Thing getActiveThing() {
+        return activeThing;
+    }
+
+    public void setActiveThing(Thing activeThing) {
+        this.activeThing = activeThing;
     }
 }

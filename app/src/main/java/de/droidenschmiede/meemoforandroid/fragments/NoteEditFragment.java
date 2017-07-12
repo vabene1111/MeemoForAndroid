@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import de.droidenschmiede.meemoforandroid.R;
 import de.droidenschmiede.meemoforandroid.activity.NoteActivity;
+import de.droidenschmiede.meemoforandroid.helper.Singleton;
+import de.droidenschmiede.meemoforandroid.objects.Thing;
 
 /**
  * Created by vabene1111 on 04.07.2017.
@@ -41,6 +44,12 @@ public class NoteEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_note, container, false);
 
+        Singleton singleton = Singleton.getInstance();
+
+        Thing thing = singleton.getActiveThing();
+
+        EditText edt_main = (EditText) rootView.findViewById(R.id.edt_F_note_main);
+        edt_main.setText(thing.getContent());
 
         return rootView;
     }

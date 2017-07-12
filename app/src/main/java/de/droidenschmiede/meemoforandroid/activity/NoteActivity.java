@@ -1,5 +1,6 @@
 package de.droidenschmiede.meemoforandroid.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -53,7 +54,8 @@ public class NoteActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-
+        Intent intent = getIntent();
+        String note_id = intent.getStringExtra("note_id");
     }
 
 

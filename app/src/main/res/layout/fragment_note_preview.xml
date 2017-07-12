@@ -7,7 +7,7 @@
                                              tools:context="de.droidenschmiede.meemoforandroid.activity.NoteActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/section_label_2"
+        android:id="@+id/tv_F_notePreview_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -20,4 +20,15 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1"/>
 
+    <br.tiagohm.markdownview.MarkdownView
+        android:id="@+id/mv_F_notePreview_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_F_notePreview_info"></br.tiagohm.markdownview.MarkdownView>
 </android.support.constraint.ConstraintLayout>
